@@ -1,0 +1,23 @@
+{
+    "name": "codemini/framework",
+    "description": "Mini framework PHP for small applications - Create fastly website or system with standard MVC structure",
+    "keywords": ["mvc","framework", "standard mvc", "standard structure"],
+    "homepage": "https://github.com/fabriciopolito/Codemini",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fabricio Polito",
+            "email": "fabriciopolito@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">= 5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Codemini\\": "src/"
+        }
+    }
+}
