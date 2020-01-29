@@ -11,20 +11,20 @@ Mini framework PHP for small applications - Create fastly website or system with
 
 **With Composer creating project**
 
-- If you want to install as composer project, run: `composer create-project --prefer-dist codemini/framework name-folder-of-you-project`  
+**1 -** If you want to install as composer project, run: `composer create-project --prefer-dist codemini/framework name-folder-of-you-project`  
 
-- Go to `public` folder and start PHP Server `php -S localhost:8080` 
+**2 -** Go to `public` folder and start PHP Server `php -S localhost:8080` 
 
 **With Github**
 
-- If you want to install with **Git clone**, run: `git clone https://github.com/fabriciopolito/Codemini.git` or download "Download ZIP" and extract files.
+**1 -** If you want to install with **Git clone**, run: `git clone https://github.com/fabriciopolito/Codemini.git` or download "Download ZIP" and extract files.
 
-- Run **Composer (required)** in root project folder where contain **composer.json** to create **autoload files**.
+**2 -** Run **Composer (required)** in root project folder where contain **composer.json** to create **autoload files**.
 
 If you have installed Composer globally:  `composer install`  
 If you have composer.phar: `php composer.phar install`
 
-- Go to `public` folder and start PHP Server `php -S localhost:8080` 
+**3 -** Go to `public` folder and start PHP Server `php -S localhost:8080` 
 
 Your index.php in document root must looks like this:
 
