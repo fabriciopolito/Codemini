@@ -56,7 +56,7 @@ try {
 
 **Modify standards files:**
 
- - **Config.php** - Define config to base_url, mysql and environment
+ - **app / `Config.php`** - Define config to base_url, mysql and environment
 
 Example: 
 
@@ -72,7 +72,7 @@ $config['mysql'] = [
 ];
 ```
 
- - **Route.php** - Define your own routes
+ - **app / `Route.php`** - Define your own routes
 
 Example:
 
