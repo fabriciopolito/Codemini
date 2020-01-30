@@ -57,8 +57,37 @@ try {
 **Modify standards files:**
 
  - **Config.php** - Define config to base_url, mysql and environment
+
+Example: 
+
+```php
+$config['base_url'] = 'http://localhost:8080/';
+$config['environment'] = 'development';
+$config['mysql'] = [
+    'host'     => 'localhost',
+    'dbname'   => 'codemini_tests',
+    'username' => 'root',
+    'password' => '',
+    'charset'  => 'utf8'
+];
+```
+
  - **Route.php** - Define your own routes
- - **Connection.php** (not required)
+
+Example:
+
+```php
+$routes['home'] = [
+    'route' => '/',
+    'controller' => 'Home',
+    'method' => 'index'
+];
+$routes['register'] = [
+    'route' => '/register',
+    'controller' => 'Register',
+    'method' => 'index'
+];
+````
 
  ... and create yours Controllers, Views and Models !
   

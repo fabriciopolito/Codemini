@@ -38,7 +38,7 @@
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
 
-        <!-- <li class="nav-item">
+        <li class="nav-item">
           <a class="nav-link" href="/">Home </a>
         </li>
               <li class="nav-item">
@@ -49,16 +49,12 @@
         </li>
               <li class="nav-item">
           <a class="nav-link" href="contato/">Fale Conosco </a>
-        </li> -->
+        </li>
 
       <?php 
         /** 
          * For test purpose, if want menu from Database:
-         *      
-        */
-      ?>
-
-              <?php 
+         *      <?php 
                 use App\Connection;
                 $db = Connection::pdo();
                 $data = $db->query('SELECT `Name`,`Permalink` FROM tab_menu ORDER BY `Ordem` ASC')->fetchAll();
@@ -73,6 +69,9 @@
                   <a class="nav-link" href="<?php echo $val['Permalink'] ?>"><?php echo $val['Name'] ?> </a>
                 </li>
               <?php endforeach; ?>
+        */
+      ?>
+
       </ul>
     </div>
   </div>

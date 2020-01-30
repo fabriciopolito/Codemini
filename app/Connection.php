@@ -44,7 +44,7 @@ class Connection{
             return $pdo;
 
         }catch(PDOException $e){
-            echo 'Databse connection error: ' . $e->getMessage();
+            die('Databse connection error: ' . $e->getMessage());
         }
 
     }
