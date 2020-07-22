@@ -1,7 +1,7 @@
 ![Codemini](http://www.integraweb.com.br/codemini.png)
 
 # Codemini
-Mini framework PHP for small applications - Create fastly website or system with standard MVC structure
+Mini framework PHP for small applications - Create quickly website or system with standard MVC structure
 
 ## Requirements
 
