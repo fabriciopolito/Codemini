@@ -1,11 +1,7 @@
 <?php 
-
 namespace App\Controllers;
 
 use Codemini\Core\Controller;
-
-//Uncomment bellow to use Model example 
-//use App\Models\Produtos as produto_model;
 
 class Produtos extends Controller{
 
@@ -13,22 +9,10 @@ class Produtos extends Controller{
         parent::__construct();
     }
 
-    public function index(){
-        
-        //Example Model usage
-
-        /**
-            $prod = new produto_model();
-            $this->view->data = $prod->selectAll();
-
-            //Example data to view
-            print '<pre>';
-            print_r($this->view->data);
-            print '</pre>';
-         */
-
+    public function index($args=""){
         $this->view->body = 'Produtos/index';
-        $this->render('Template/index');
+        $this->view('Template/index');
     }
 
 }
+	

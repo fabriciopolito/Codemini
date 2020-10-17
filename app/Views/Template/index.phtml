@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <base href="<?php echo $config['base_url'] ?>">
+    <base href="<?=configItem('base_url')?>">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -31,7 +31,7 @@
  <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
   <div class="container">
-    <a class="navbar-brand" href="<?php echo $config['base_url'] ?>">Start Bootstrap</a>
+    <a class="navbar-brand" href="<?=configItem('base_url')?>">Start Bootstrap</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -50,28 +50,6 @@
               <li class="nav-item">
           <a class="nav-link" href="contato/">Fale Conosco </a>
         </li>
-
-      <?php 
-        /** 
-         * For test purpose, if want menu from Database:
-         *      <?php 
-                use App\Connection;
-                $db = Connection::pdo();
-                $data = $db->query('SELECT `Name`,`Permalink` FROM tab_menu ORDER BY `Ordem` ASC')->fetchAll();
-
-                //Print menu's from Database
-                //Only tests purpose
-                //You can write menu manually in HTML
-                //You can run your own query's
-                foreach($data as $key => $val):
-              ?>
-                <li class="nav-item">
-                  <a class="nav-link" href="<?php echo $val['Permalink'] ?>"><?php echo $val['Name'] ?> </a>
-                </li>
-              <?php endforeach; ?>
-        */
-      ?>
-
       </ul>
     </div>
   </div>
@@ -79,7 +57,7 @@
 
   <?php 
       //Content of page from Controller
-      $this->render($this->view->body)
+      $this->view($this->view->body)
   ?>
 
     <!-- Optional JavaScript -->

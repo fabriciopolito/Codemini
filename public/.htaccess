@@ -1,4 +1,12 @@
+# Allow rewrite module
+# Note: This options only is allowed if your server contain AllowOverride properly set
 RewriteEngine on
+# If the requested filename is not a directory
+RewriteCond %{REQUEST_FILENAME} !-d
+# If the requested filename is not a regular file like css, js
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond &{REQUEST_FILENAME} !-d
+# If the requested filename is not a symbolic link
+RewriteCond %{REQUEST_FILENAME} !-l
+# Then Rewrite any request to index.php
 RewriteRule ^(.*)$ index.php/$1 [L]
+

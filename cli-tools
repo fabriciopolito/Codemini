@@ -1,0 +1,490 @@
+#!/usr/bin/env php
+<?php
+/*
+ * --------------------------------------------------------------------
+ * CLI COMMAND-LINE TOOLS 
+ * --------------------------------------------------------------------
+ * 
+ * HOW TO USE? OPEN A TERMINAL AND RUN:
+ * 
+ * php cli-tools help
+ * 
+ * --------------------------------------------------------------------
+ * 
+ * I CAN'T RUN PHP ON TERMINAL, WHY?
+ * 
+ * If you want run any php command on terminal, you must have to add
+ * php folder in paths of operation system
+ * 
+ * --------------------------------------------------------------------
+ * 
+ * SET PERMISSIONS IN THIS FILE:
+ * 
+ * On Linux: chmod 755 cli-tools
+ * On Windows maybe not necessary
+ * 
+ */
+
+function showError($msg) {
+	exit("\nError!!!\n" . $msg . "\n");
+}
+
+function showSuccess($msg) {
+	exit("\nSuccess!!!\n" . $msg . "\n");
+}
+
+if (php_sapi_name() !== 'cli') {
+    showError("Command line not found! Run: php cli-tools help");
+}
+
+if (strpos(PHP_SAPI, 'cgi') === 0)
+{
+	die("The cli-tools is not supported when running php-cgi\n\n");
+}
+
+/*
+ * --------------------------------------------------------------------
+ * Show php errors
+ * --------------------------------------------------------------------
+ */
+error_reporting(-1);
+ini_set('display_errors', '1');
+
+/*
+ * --------------------------------------------------------------------
+ * Include Constants that contain folders locations
+ * --------------------------------------------------------------------
+ */
+require __DIR__ . DIRECTORY_SEPARATOR . "app" . DIRECTORY_SEPARATOR . "Constants.php";
+
+/*
+ * --------------------------------------------------------------------
+ * Cli Arguments
+ * --------------------------------------------------------------------
+ */
+$total_arguments = $_SERVER["argc"];
+$filename = trim($_SERVER["argv"][0]);
+$arg1 = isset($_SERVER["argv"][1]) ? trim($_SERVER["argv"][1]) : "";
+$arg2 = isset($_SERVER["argv"][2]) ? trim($_SERVER["argv"][2]) : "";
+$arg3 = isset($_SERVER["argv"][3]) ? trim($_SERVER["argv"][3]) : "";
+
+/*
+ * --------------------------------------------------------------------
+ * Functions
+ * --------------------------------------------------------------------
+ */
+function cleanString($str) {
+  $res = preg_replace("/[^a-zA-Z0-9\-_]/", "", $str);
+  return $res;
+}
+
+function isValidFileName($str) {
+	if(preg_match('/[^a-zA-Z0-9\-_\/]/', $str)) return false;
+	return true;
+}
+
+function help(){
+	
+	$text = <<<eof
+	
+ | --------------------------------------------------------------------------- |
+ | CLI COMMAND-LINE TOOLS                                                      |
+ | --------------------------------------------------------------------------- |
+ | This cli will help you to create quick objects like controllers,            |
+ | models and views.                                                           |
+ |                                                                             |
+ | Usage:                                                                      |
+ |  php cli-tools <option> <name_resource> <with_option>                       |
+ |                                                                             |
+ | --------------------------------------------------------------------------- |
+ | CREATE CONTROLLER                                                           |
+ | --------------------------------------------------------------------------- |
+ | Command 1: php cli-tools create-controller <name> <option>                  |
+ | Command 2: php cli-tools create-controller <folder>/<name> <option>         |
+ |                                                                             |
+ | Options:                                                                    |
+ |  --BaseController     Extend BaseController                                 |
+ |  --AuthController     Extend AuthController                                 |
+ |  --default            Extend Controller                                     |
+ |                                                                             |
+ | Output: ./app/Controllers/Name.php                                          |
+ |                                                                             |
+ | --------------------------------------------------------------------------- |
+ | CREATE MODEL                                                                |
+ | --------------------------------------------------------------------------- |
+ | Command 1: php cli-tools create-model <name>                                |
+ | Command 2: php cli-tools create-model <folder>/<name>                       |
+ |                                                                             |
+ | Output: ./app/Models/Name.php                                               |
+ |                                                                             |
+ | --------------------------------------------------------------------------- |
+ | PHP built-in web server                                                     |
+ | --------------------------------------------------------------------------- |
+ | Codemini comes with a local development server. You can use the serve       |
+ | script to launch it, with the following command line in the main directory: |
+ |                                                                             |
+ | Command 1: php cli-tools serve                                              |
+ | Command 2: php cli-tools serve --host=localhost:8181                        |
+ |                                                                             |
+ | Note: if you do not pass the --host= then the cli-tools will get            |
+ |  your base url in ./app/Config.php and run according that                   |
+ |                                                                             |
+ | Note: the PHP's built-in development server only works with PHP 5.4+        |
+ |                                                                             |
+ | --------------------------------------------------------------------------- |
+ 
+eof;
+
+echo $text;
+	
+}
+
+function createController(){
+	global $arg2;
+	global $arg3;
+
+	/**
+	 * $arg3 possible values:
+	 * --BaseController
+	 * --AuthController
+	 * If blank then default controller assumed
+	 */
+	$arg3 = strtolower(cleanString($arg3));
+
+	$arg2 = str_replace(".php", "", $arg2);
+	$arg2 = str_replace("-", "_", $arg2);
+	
+	if(empty($arg2)){
+		showError("Provide controller name: Ex: php cli-tools create-controller user");
+	}
+	
+	if(isValidFileName($arg2) === false){
+		showError("Provide valid controller name. Regex: /[^a-zA-Z0-9\-_]/");
+	}
+	
+	if(! is_dir(DIR_CONTROLLER)){
+		//mkdir(DIR_CONTROLLER, 0755, true
+		showError("Controller folder does not exists, please create it in ./app and named 'Controllers'");
+	}
+	
+	//Check if there is <folder_name>/<name_controler> then explode to values
+	if(strpos($arg2, "/") === false){
+		$controller = ucfirst($arg2);
+		$path = "";
+	}else{
+		$args_exp = explode("/", $arg2);
+		//folder, so create it
+		$path = ucfirst($args_exp[0]);
+		//file controller
+		$controller = ucfirst($args_exp[1]);
+
+		if(empty($controller)) {
+			showError("Provide controller name: Ex: php cli-tools create-controller folder_name/controller_name");
+		}
+	}
+
+	$full_path = DIR_CONTROLLER . (empty($path) ? "" : $path . DIRECTORY_SEPARATOR) . $controller . ".php";
+	
+	if(file_exists($full_path)) {
+		showError("The file $controller already exists in " . $full_path);
+	}
+	
+	if( ! is_dir(DIR_CONTROLLER . $path)) {
+		if( ! mkdir(DIR_CONTROLLER . $path, 0755, true)) {
+			showError("Failed create directory, check permissions: " . DIR_CONTROLLER . $path . "");
+		}
+	}
+
+	$path_to_namespace = ($path == "") ? "" : "\\" . $path;
+	
+	if($arg3 == '--basecontroller') {
+		$controller_context = <<<eof
+<?php 
+namespace App\Controllers$path_to_namespace;
+
+use Codemini\Core\Request;
+
+class $controller extends BaseController{
+
+	public function __construct(){
+		parent::__construct();
+	}
+
+	public function index(\$args=""){
+		
+		//Data to view
+		//Example: \$this->view->data = ['php', 'js', 'nodejs', 'mongodb', 'css'];
+
+		//Load view
+		//\$this->view('template_name');
+
+		echo "Controller name: " . Request::getController() . "<br>";
+        echo "Method name: " . Request::getMethod() . "<br>";
+	}
+
+}
+			
+eof;
+
+	} elseif($arg3 == '--authcontroller') {
+		$controller_context = <<<eof
+<?php 
+namespace App\Controllers$path_to_namespace;
+
+use Codemini\Core\Request;
+
+class $controller extends AuthController{
+
+	public function __construct(){
+		parent::__construct();
+	}
+
+	public function index(\$args=""){
+		
+		//Data to view
+		//Example: \$this->view->data = ['php', 'js', 'nodejs', 'mongodb', 'css'];
+
+		//Load view
+		//\$this->view('template_name');
+
+		echo "Controller name: " . Request::getController() . "<br>";
+        echo "Method name: " . Request::getMethod() . "<br>";
+	}
+
+}
+	
+eof;
+	} else {
+		$controller_context = <<<eof
+<?php 
+namespace App\Controllers$path_to_namespace;
+
+use Codemini\Core\Controller;
+use Codemini\Core\Request;
+
+class $controller extends Controller{
+
+    public function __construct(){
+        parent::__construct();
+    }
+
+    public function index(\$args=""){
+        
+        //Data to view
+        //Example: \$this->view->data = ['php', 'js', 'nodejs', 'mongodb', 'css'];
+
+		//Load view
+		//\$this->view('template_name');
+		
+		echo "Controller name: " . Request::getController() . "<br>";
+        echo "Method name: " . Request::getMethod() . "<br>";
+    }
+
+}
+	
+eof;
+
+	}/** end if */
+
+	if(file_put_contents($full_path, $controller_context)) {
+		showSuccess("Controller $controller created at: " . $full_path);
+	} else{
+		showError("Failed to create controller $controller at: " . $full_path);
+	}
+	
+}
+
+function createModel(){
+	global $arg2;
+	$arg2 = str_replace(".php", "", $arg2);
+	$arg2 = str_replace("-", "_", $arg2);
+	
+	if(empty($arg2)){
+		showError("Provide model name: Ex: php cli-tools create-model user");
+	}
+	
+	if(isValidFileName($arg2) === false){
+		showError("Provide valid model name. Regex: /[^a-zA-Z0-9\-_]/");
+	}
+	
+	if(! is_dir(DIR_MODEL)){
+		//mkdir(DIR_MODEL, 0755, true
+		showError("Model folder does not exists, please create it at ./app and named 'Models'");
+	}
+	
+	if(strpos($arg2, "/") === false){
+		$model = ucfirst($arg2);
+		$path = "";
+	}else{
+		$args_exp = explode("/", $arg2);
+		//folder, so create it
+		$path = ucfirst($args_exp[0]);
+		//file model
+		$model = ucfirst($args_exp[1]);
+
+		if(empty($model)) {
+			showError("Provide model name: Ex: php cli-tools create-model documentation/index");
+		}
+	}
+
+	$full_path = DIR_MODEL . (empty($path) ? "" : $path . DIRECTORY_SEPARATOR) . $model . ".php";
+	
+	if(file_exists($full_path)) {
+		showError("The file $model already exists in " . $full_path);
+	}
+	
+	if( ! is_dir(DIR_MODEL . $path)) {
+		if( ! mkdir(DIR_MODEL . $path, 0755, true)) {
+			showError("Failed create directory, check permissions: " . DIR_MODEL . $path . "");
+		}
+	}
+
+	$path_to_namespace = ($path == "") ? "" : "\\" . $path;
+	
+	$model_context = <<<eof
+<?php 
+namespace App\Models$path_to_namespace;
+
+use Codemini\Core\Model;
+
+class $model extends Model{
+
+	protected \$table = 'table_name';
+
+	/**
+	 * Construct the parent model class for get instance '\$this->db' PDO and the 
+	 * SIMPLE QUERY BUILDER functions
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+	}
+
+	/**
+	 * Example 1 with VERY SIMPLE query builder
+	 */
+	public function allProducts(\$orderBy = "ORDER BY `name` ASC"){
+		\$sql = "SELECT * FROM `{\$this->table}` {\$orderBy}";
+		\$this->query(\$sql);
+		\$this->execute();
+		return \$this->fetchAll();
+	}
+
+	/**
+	 * Example 2 with VERY SIMPLE query builder
+	 */
+	public function productById(\$val)
+	{
+		\$sql = "SELECT * FROM `{\$this->table}` WHERE `id` = :id";
+		\$this->query(\$sql);
+		\$this->bind(":id", \$val);
+		\$this->execute();
+		return \$this->fetch();
+	}
+
+	/**
+	 * Example 3 with VERY SIMPLE query builder
+	 */
+	public function productsByPrice(\$val)
+	{
+		\$sql = "SELECT * FROM `{\$this->table}` WHERE `price` = :price";
+		\$this->query(\$sql);
+		\$this->execute([":price" => \$val]);
+		return \$this->fetchAll();
+	}
+
+	/**
+	 * Example 4 with MANUALLY statement \$db
+	 */
+	public function productsByName(\$val)
+	{
+		\$sql = "SELECT * FROM `{\$this->table}` WHERE `name` = :name";
+		\$stmt = \$this->db->prepare(\$sql);
+		\$stmt->bindParam(":name", \$val, \PDO::PARAM_STR);
+		\$stmt->execute();
+		return \$stmt->fetch();
+	}
+}
+	
+eof;
+
+	if(file_put_contents($full_path, $model_context)) {
+		showSuccess("Model $model created at: " . $full_path);
+	} else{
+		showError("Failed to create model $model at: " . $full_path);
+	}
+	
+}
+
+function cleanHost($host)
+{
+	$host = rtrim($host, "/");
+	$host = str_replace("http://www.", "", $host);
+	$host = str_replace("https://www.", "", $host);
+	$host = str_replace("https://", "", $host);
+	$host = str_replace("http://", "", $host);
+	$host = str_replace("--host=", "", $host);
+	$host = strtolower($host);
+	return $host;
+}
+
+function serveProject()
+{
+	require DIR_APP . 'Config.php';
+
+	global $arg2;
+
+	$host = cleanHost($arg2);
+
+	if(empty($host)) {
+		$host = $config['base_url'];
+		$host = cleanHost($host);
+		$exp = explode("/", $host);
+		$host = isset($exp[0]) ? $exp[0] : "";
+
+		if(empty($host)) {
+			showError("Failed to start the server.\nYou must should config the base url in ./App/Config.php\nOR run with --host= option like php cli-tools --host=localhost:8080");
+		}
+	} 
+
+	if(strpos($host, ":") === false) {
+		$host = $host . ":80";
+	}
+
+	if(is_dir('public')) {
+	   $command = "php -S {$host} -t public/";
+	} else {
+		$command = "php -S {$host}";
+	}
+
+	if( ! function_exists('shell_exec')) {
+		showError("Failed to start the server.\nYour PHP installation does not have shell_exec function allowed.");
+	}
+
+	echo shell_exec($command);
+
+}
+
+/*
+ * --------------------------------------------------------------------
+ * Run...
+ * --------------------------------------------------------------------
+ */
+switch($arg1){
+	case 'help':
+	case '-h':
+		help();
+		break;
+		
+	case 'create-controller':
+		createController();
+		break;
+	case 'create-model':
+		createModel();
+		break;
+	case 'serve':
+		serveProject();
+		break;
+	default:
+		help();
+}

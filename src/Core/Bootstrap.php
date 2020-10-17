@@ -20,103 +20,66 @@ use \Exception;
 const CODEMINI_VERSION = 'v1.0';
 
 abstract class Bootstrap{
-
+    
     /**
-	 * Routes object
-	 *
-	 * Object $routes for use all methods of class
-	 */
-    private $routes = [];
-
-    /**
-	 * Constructor
-	 *
-	 * @access	public
-	 */
+     * __construct
+     *
+     * @return void
+     */
     public function __construct(){
         $this->run();
     }
 
     /**
-	 * Get routes
-	 *
-	 * @param 	none
-	 * @return 	object Array
-	 */
-    public function getRoutes(){
-
-        if(file_exists('../app/Route.php')){
-            require_once '../app/Route.php';
-        }else{
-            throw new \Exception('The file Route.php does not exists. Please create it in app/ and assign to $routes variable. Ex: $routes[\'home\'] = [\'route\', \'controller\', \'method\']');
-        }
-        
-        $this->routes = $routes;
-        return $this->routes;
-    }
-
-    /**
-	 * Create Controller and methods according url active
+	 * Create Controller and methods according request URI
 	 *
 	 * @param	none
 	 * @return	void
 	 */
     protected function run(){
 
-        $active_url = $this->getURL();
+        /**
+         * Required for construct parts of URI and sets statics variables
+         */
+        Request::start();
 
-        foreach($this->getRoutes() as $path => $route){
+        //can be empty if there is not a subdirectory in ./App/Controllers
+        $_directoryController = Request::getDirectoryController();
+        $_controller = Request::getController();
+        $_method = Request::getMethod();
+        $_args = Request::getArgs();
 
-            if($active_url == $route['route']){
-                
-                $class = "App\\Controllers\\" . ucfirst($route['controller']);
-                $method = $route['method'];
+        //The file class with namespace
+        $class = NAMESPACE_CONTROLLER . (!empty($_directoryController) ? $_directoryController . "\\" : "") . $_controller;
 
-                if(file_exists('../app/Controllers/' . ucfirst($route['controller']) . '.php')){
-                    $controller = new $class; 
-                }else{
-                    throw new \Exception('The class: ' . $class . ' does not exists. Please create it.');
-                }
-                
-                if(method_exists($controller, $method)){
-                    $controller->$method();
-                    return;
-                }else{
-                    throw new \Exception('The method: ' . $method . ' does not exists in ' . $class . '. Please create it.');
-                }
+        //The file with directory separator
+        $_directoryController = (!empty($_directoryController) ? $_directoryController . DIRECTORY_SEPARATOR : "");
 
-                break;
+        // Check if controller and methods exists,
+        // then instance the object Controller
+        if(file_exists(DIR_CONTROLLER . $_directoryController . $_controller . '.php')){
+           
+            $controller = new $class; 
+
+            if(method_exists($controller, $_method)){
+                $controller->$_method($_args);
+                return;
+            }else{
+                if(configItem('environment') == 'development')
+                    throw new \Exception('The method: ' . $_method . ' does not exists in ' . $class . '. Please create it.');
+                else
+                    Controller::setPageNotFound();
             }
-            
+
+        }else{
+            if(configItem('environment') == 'development')
+                throw new \Exception('The class: ' . $class . ' does not exists. Please create it.');
+            else
+                Controller::setPageNotFound();
         }
 
-        //if not exists route then show 404
-        header('HTTP/1.0 404 Not Found');
-        echo 'Not found a route! 404<br>';
-        echo 'Custom this page if you want!';
-        
     }
 
-    /**
-	 * Get active URL
-	 *
-	 * @param	none
-	 * @return	string of url
-	 */
-    protected function getURL(){
-        
-        if(empty($_SERVER['REQUEST_URI'])){
-            throw new \Exception('REQUEST_URI string not exists.');
-        }
-
-        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $uri = str_replace('/index.php', '', $uri);
-
-        //if blank or '/', then return '/' ... if not remove last '/'
-        //Ex: it is valid: localhost:8080/home or localhost:8080/home/
-        $uri = ($uri == '' || $uri == '/') ? '/' : rtrim($uri, '/');
-        
-        return $uri;
-    }
+    
 
 }

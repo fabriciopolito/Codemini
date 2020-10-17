@@ -1,7 +1,15 @@
-![Codemini](http://www.integraweb.com.br/codemini.png)
+![Codemini](https://i.ibb.co/DpZpBjB/codemini.png)
 
 # Codemini
-Mini framework PHP for small applications - Create quickly website or system with standard MVC structure
+Mini PHP framework - Create quickly application with standard MVC structure.
+
+Codemini is very simple to use, you can run your projet in `public` folder like Laravel, CodeIgniter 4 or if you are using shared host, just copy `index.php` and `.htaccess` into root folder and all thing going to work well.
+
+**Third party tools WAMP or XAMPP**
+
+If you are using WAMPP Server and your project is located in a subfolder then set the `$config['app_project_uri']` properly with the name folders. The config file is located in `app/Config.php`.
+
+Example: My project is located in `C:\wamp64\www\projects\codemini_framework` then set this way `$config['app_project_uri'] = 'projects/codemini_framework'` and all thing going to work well.
 
 ## Requirements
 
@@ -9,98 +17,105 @@ Mini framework PHP for small applications - Create quickly website or system wit
 
 ## Installation
 
-**With Composer creating project**
+#### With Composer Creating Project
 
 **1 -** If you want to install as composer project, run: `composer create-project --prefer-dist codemini/framework name-folder-of-you-project`  
 
-**2 -** Go to `public` folder and start PHP Server `php -S localhost:8080` 
+**2 -** Open terminal and run cli-tools: `php cli-tools serve`
 
-**With Github**
+**Optional:** Run with PHP built-in server, go to `public` folder and run: `php -S localhost:8080` 
+
+#### With Github
 
 **1 -** If you want to install with **Git clone**, run: `git clone https://github.com/fabriciopolito/Codemini.git` or download "Download ZIP" and extract files.
 
 **2 -** Run **Composer (required)** in root project folder where contain **composer.json** to create **autoload files**.
 
-If you have installed Composer globally:  `composer install`  
-If you have composer.phar: `php composer.phar install`
+- If you have installed Composer globally:  `composer install`  
+- If you have composer.phar: `php composer.phar install`
 
-**3 -** Go to `public` folder and start PHP Server `php -S localhost:8080` 
+**3 -** Open terminal and run cli-tools: `php cli-tools serve`
 
-Your index.php in document root must looks like this:
+**Optional:** Run with PHP built-in server, go to `public` folder and run: `php -S localhost:8080`
+
+Your index.php must looks like this:
 
 ```php
-require_once '../vendor/autoload.php';
+<?php
+
+$dirname = strtolower(basename(__DIR__));
+
+if($dirname == 'public') {
+    require_once '../app/Init.php';
+} else {
+    require_once 'app/Init.php';
+}
 
 try {
 
-    $myAPP = new App\Init;
+    $myAPP = new Init();
 
 } catch (Exception $e) {
 
-    //Comment bellow to hidde errors to user's
-    //Or implements a custom Log class
-    //Or use a popular class like Monolog
-    //example: composer require monolog/monolog
-    $log = '<div style="border:1px solid red; color: red; padding:10px;  margin:15px; font:14px Tahoma">';
-    $log .= 'Msg: ' . $e->getMessage() . '<br>';
-    $log .= 'Line: ' . $e->getLine() . '<br>';
-    $log .= 'File: ' . $e->getFile();
-    $log .= '</div>';
+    $e->getMessage();
 
-    echo $log;
-
-}
+} //end try...catch
 ```
 
 ---
 
+## Configuration
+
 **Modify standards files:**
 
- - **app / `Config.php`** - Define config to base_url, mysql and environment
+ - **app / `Config.php`** - Define config to base_url, mysql, environment, timezone etc
 
 Example: 
 
 ```php
-$config['base_url'] = 'http://localhost:8080/';
+$config['app_project_uri'] = '';
+
 $config['environment'] = 'development';
+
 $config['mysql'] = [
     'host'     => 'localhost',
     'dbname'   => 'codemini_tests',
     'username' => 'root',
     'password' => '',
-    'charset'  => 'utf8'
+    'charset'  => 'utf8',
+    'display_error' => ($config['environment'] == 'development') ? true : false
 ];
+
+$config['session_name'] = 'MY_Session_name_';
+
+$config['timezone'] = 'America/Sao_Paulo';
+
+$config['page_not_found'] = 'PageNotFound@index';
+
+$config['view_extension'] = '.phtml';
 ```
+**Note:** the file app/Config.php has full documentation each option
 
- - **app / `Route.php`** - Define your own routes
-
-Example:
-
-```php
-$routes['home'] = [
-    'route' => '/',
-    'controller' => 'Home',
-    'method' => 'index'
-];
-$routes['register'] = [
-    'route' => '/register',
-    'controller' => 'Register',
-    'method' => 'index'
-];
-````
+- **app / `Constants.php`** - Define your project name and files location
 
  ... and create yours Controllers, Views and Models !
-  
+
+## Using Controller, Models and Views
+
 ### Creating Controller
 
 Controllers / `Home.php`
- 
+
+- With cli-tools: `php cli-tools create-controller Home`
+
+Output: ./app/Controllers/Home.php
+
  ```php
 <?php 
-
 namespace App\Controllers;
 
 use Codemini\Core\Controller;
+use Codemini\Core\Request;
 
 class Home extends Controller{
 
@@ -108,13 +123,16 @@ class Home extends Controller{
         parent::__construct();
     }
 
-    public function index(){
-
+    public function index($args=""){
+        
         //Data to view
         //Example: $this->view->data = ['php', 'js', 'nodejs', 'mongodb', 'css'];
 
-        $this->view->body = 'Home/Index';
-        $this->render('Template/Index');
+		//Load view
+		//$this->view('template_name');
+		
+		echo "Controller name: " . Request::getController() . "<br>";
+         echo "Method name: " . Request::getMethod() . "<br>";
     }
 
 }
@@ -137,7 +155,7 @@ Views / `Template/index.phtml`
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     
-    <title>System or Site name</title>
+    <title>Application name</title>
   </head>
   <body>
   
@@ -159,52 +177,93 @@ Views / `Template/index.phtml`
 
 ### Creating Models
 
-Models / `Produtos.php`
+Models / `Products.php`
+
+- With cli-tools: `php cli-tools create-model Products`
+
+Output: ./app/Models/Products.php
  
  ```php
 <?php 
-
 namespace App\Models;
 
 use Codemini\Core\Model;
 
-class Produtos extends Model{
+class Products extends Model{
 
-    protected $table = 'tab_products';
+	protected $table = 'table_name';
 
-    /**
-     * Construct parent Model for get instance '$this->db'
-     */
-    public function __construct(){
-        parent::__construct();
-    }
+	/**
+	 * Construct the parent model class for get instance '$this->db' PDO and the 
+	 * SIMPLE QUERY BUILDER functions
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+	}
 
-    /**
-     * Do your own code here... 
-     * Custom the way you want
-     * 
-     * Use $db instance of PDO class and write yours query's
-     * 
-     * EX: $this->db->query('SELECT * FROM users')->fetch()
-     *     $this->db->query('SELECT * FROM users')->fetchAll()
-     */
+	/**
+	 * Example 1 with VERY SIMPLE query builder
+	 */
+	public function allProducts($orderBy = "ORDER BY `name` ASC"){
+		$sql = "SELECT * FROM `{$this->table}` {$orderBy}";
+		$this->query($sql);
+		$this->execute();
+		return $this->fetchAll();
+	}
 
-    public function selectAll($orderBy = "ORDER BY `Name` ASC"){
-        $sql = "SELECT `Id`, `Name`, `Price`, `Created`";
-        $sql .= " FROM `{$this->table}` {$orderBy}";
-        $query = $this->db->query($sql);
-        return $query->fetchAll();
-    }
+	/**
+	 * Example 2 with VERY SIMPLE query builder
+	 */
+	public function productById($val)
+	{
+		$sql = "SELECT * FROM `{$this->table}` WHERE `id` = :id";
+		$this->query($sql);
+		$this->bind(":id", $val);
+		$this->execute();
+		return $this->fetch();
+	}
 
-    public function insert(){}
-    public function delete(){}
-    public function update(){}
+	/**
+	 * Example 3 with VERY SIMPLE query builder
+	 */
+	public function productsByPrice($val)
+	{
+		$sql = "SELECT * FROM `{$this->table}` WHERE `price` = :price";
+		$this->query($sql);
+		$this->execute([":price" => $val]);
+		return $this->fetchAll();
+	}
 
+	/**
+	 * Example 4 with MANUALLY statement $db
+	 */
+	public function productsByName($val)
+	{
+		$sql = "SELECT * FROM `{$this->table}` WHERE `name` = :name";
+		$stmt = $this->db->prepare($sql);
+		$stmt->bindParam(":name", $val, \PDO::PARAM_STR);
+		$stmt->execute();
+		return $stmt->fetch();
+	}
 }
 ```
+## Helper Functions
 
- Just it ! 
- 
+- `configItem('key')` return the config specified name.
+Example: `<?php echo configItem('base_url') ?>`
+
+- `&getInstance()` return controller object instance
+
+## Libraries
+
+- `Input` - Help you to manipulate get, post, file
+- `Redirect` - Redirect user to other location
+- `Session` - Help you to manipulate session data
+- `Validator` - Help you validate data
+
+**Note:** the libraries has full documentation each option
+
 ### Author
 
 Fabricio Pólito - <fabriciopolito@gmail.com> - <https://github.com/fabriciopolito>

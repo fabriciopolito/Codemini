@@ -20,46 +20,106 @@ use \stdClass;
 
 abstract class Controller{
 
+    private static $instance;
+
     /**
 	 * $viewDir
 	 *
 	 * Set curren path of Views. 
      * Default: '../app/Views/'
 	 */
-    protected $viewDir = '../app/Views/';
+    private $viewDir = DIR_APP . 'Views/';
 
     /**
 	 * $view
 	 *
-	 * An stdClass object for data manipulation purpose in Controllers 
+	 * An stdClass object for data manipulation purpose in Controllers/Views 
 	 */
-    protected $view;
+    public $view;
 
     /**
 	 * Constructor
      * - Create object stdClass globally
-	 *
+	 * - Create object reference
 	 * @access	public
 	 */
     public function __construct(){
+        self::$instance =& $this;
         $this->view = new \stdClass();
     }
 
     /**
-	 * Render element for display HTML to views
+	 * Return Controller object reference
 	 *
-	 * @param	string template name
+	 * @param	none
+	 * @return	object class reference
+	 */
+    public static function &getInstance()
+	{
+		return self::$instance;
+	}
+
+    /**
+	 * Display files of Views
+	 *
+	 * @param	string view name
 	 * @return	void
 	 */
-    public function render($template){
+    public function view($view)
+    {
+        $configExt = configItem('view_extension');
 
-        require '../app/Config.php';
-
-        if (file_exists($this->viewDir . $template . '.phtml')) {
-            require_once $this->viewDir . $template . '.phtml';
-        }else{
-            throw new \Exception('The file ' . $this->viewDir . $template . '.phtml  does not exists. Please create it.');
+        if(empty($configExt)){
+            $configExt = '.php';
         }
+
+        //if $view has extension then display original args without config view_extension
+        $explicitExt = strrchr($view, '.');
+
+        if($explicitExt != ""){
+            $configExt = "";
+        }
+
+        if (is_readable($this->viewDir . $view . $configExt)) {
+            require $this->viewDir . $view . $configExt;
+        }else{
+            throw new \Exception('The file ' . $this->viewDir . $view . $configExt . '  does not exists. Please create it.');
+        }
+    }
+
+    /**
+	 * Show 404 error page
+	 *
+	 * @param	none
+	 * @return	null
+	 */
+    public static function setPageNotFound()
+    {
+        header('HTTP/1.0 404 Not Found');
+
+        $configPage = configItem('page_not_found');
+
+        $controllerMethod = explode("@", $configPage);
+
+        $_controller = isset($controllerMethod[0]) ? $controllerMethod[0] : '';
+        $_method = isset($controllerMethod[1]) ? $controllerMethod[1] : '';
+
+        $class = NAMESPACE_CONTROLLER . ucfirst($_controller);
+        
+        if(file_exists(DIR_CONTROLLER . ucfirst($_controller) . '.php')){
+            $controller = new $class;
+
+            if(method_exists($controller, $_method)){
+                $controller->$_method();
+                return;
+            }else{
+                die('The method: ' . $_method . ' does not exists in ' . $class . '. Please create it.');
+            }
+
+        }else{
+            die('The class: ' . $class . ' does not exists. Please create it.');
+        }
+
     }
 
 }

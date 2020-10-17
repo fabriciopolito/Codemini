@@ -1,5 +1,4 @@
 <?php 
-
 namespace App\Controllers;
 
 use Codemini\Core\Controller;
@@ -10,13 +9,10 @@ class Sobre extends Controller{
         parent::__construct();
     }
 
-    public function index(){
-        
-        //Data to view
-        //Example: $this->view->data = ['php', 'js', 'nodejs', 'mongodb', 'css'];
-        
+    public function index($args=""){
         $this->view->body = 'Sobre/index';
-        $this->render('Template/index');
+        $this->view('Template/index');
     }
 
 }
+	

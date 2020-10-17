@@ -20,31 +20,45 @@ use \PDOException;
 
 class Connection{
 
+        
     /**
-	 * PDO MySQL
-	 *
-	 * @param	none 
-	 * @return	object PDO connection
-	 */
+     * pdo
+     * 
+     * @param none
+     * @return void
+     */
     public static function pdo(){
-
-        include 'Config.php';
 
         try{
 
+            /**
+             * Set config connections ./app/Config.php
+             */
+            $config = configItem('mysql');
+            
             $str = 'mysql:';
-            $str .= 'host=' . $config['mysql']['host'];
-            $str .= ';dbname=' . $config['mysql']['dbname'];
-            $str .= ';charset=' . $config['mysql']['charset'];
+            $str .= 'host=' . $config['host'];
+            $str .= ';dbname=' . $config['dbname'];
+            $str .= ';charset=' . $config['charset'];
 
-            $pdo = new \PDO($str, $config['mysql']['username'], $config['mysql']['password']);
+            $pdo = new \PDO($str, $config['username'], $config['password']);
+
             $pdo->setAttribute (PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $pdo->setAttribute (PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+            /**
+             * What type of default return data you want?
+             *  PDO::FETCH_OBJ
+             *  PDO::FETCH_ASSOC
+             *  PDO::FETCH_BOTH
+             * 
+             * https://www.php.net/manual/pt_BR/pdostatement.fetch.php
+             */
+            $pdo->setAttribute (PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 
             return $pdo;
 
         }catch(PDOException $e){
-            die('Databse connection error: ' . $e->getMessage());
+            die('Database connection error: ' . $e->getMessage());
         }
 
     }
