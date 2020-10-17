@@ -3,9 +3,13 @@
 # Codemini
 Mini PHP framework - Create quickly application with standard MVC structure.
 
+**Why use Codemini?**
+
+If you don't want to use a complex structure due to any reasons and don't want being tied down it, so Codemini is option for you.
+
 Codemini is very simple to use, you can run your projet in `public` folder like Laravel, CodeIgniter 4 or if you are using shared host, just copy `index.php` and `.htaccess` into root folder and all thing going to work well.
 
-**Third party tools WAMP or XAMPP**
+**Third party tools like WAMP or XAMPP**
 
 If you are using WAMPP Server and your project is located in a subfolder then set the `$config['app_project_uri']` properly with the name folders. The config file is located in `app/Config.php`.
 
@@ -14,6 +18,28 @@ Example: My project is located in `C:\wamp64\www\projects\codemini_framework` th
 ## Requirements
 
 - Codemini works with PHP 5.4+.
+
+## Project structure
+
+- **app/**
+	- Controllers/
+	- Models/
+	- Views/
+	- Libraries/
+	- Config.php
+	- Constants.php
+	- Connection.php
+	- Init.php
+- **public/**
+	- .htaccess
+	- index.php
+- **src/**
+	- Core/
+		- Bootstrap.php
+		- Common.php
+		- Controller.php
+		- Model.php
+		- Request.php
 
 ## Installation
 
@@ -258,11 +284,92 @@ Example: `<?php echo configItem('base_url') ?>`
 ## Libraries
 
 - `Input` - Help you to manipulate get, post, file
+	- `echo Input::get('email')`
+	- `echo Input::post('email')`
+	- `echo Input::file('userfile')`
+	- `echo Input::all()`
 - `Redirect` - Redirect user to other location
+	- `echo Redirect::to(configItem('base_url') . 'login/index')`
 - `Session` - Help you to manipulate session data
+	- `Session::start()`
+	- `Session::set('logged_in', true)`
+	- `Session::set(array('user_id' => 1, 'logged_in' => true))`
+	- `Session::get('user_id')`
+	- `Session::has('logged_in')`
+	- `Session::all()`
+	- `Session::id()`
+	- `Session::regenerateId()`
+	- `Session::remove('user_id')`
+	- `Session::destroy()`
 - `Validator` - Help you validate data
+	- `Validator::getErrors()`
+	- `Validator::getMsg()`
+	- `Validator::setOpenTag('<p>')`
+	- `Validator::setOpenTag('</p>')`
+	- `Validator::required($val)`
+	- `Validator::isEmail($val)`
+	- `Validator::isUrl($val)`
+	- `Validator::isFloat($val)`
+	- `Validator::isInt($val)`
+	- `Validator::isBool($val)`
+	- `Validator::isIp($val)`
+	- `Validator::regex($val, '/[a-z]/i')`
 
-**Note:** the libraries has full documentation each option
+**Note:** The libraries has full documentation in each option.
+
+### Do you want to create other folders and files?
+
+You are free! 
+So example, create a folder `Helpers` in `./app/` and after a file `Upload.php` and the only thing you have todo is set the properly namespace for autoloading.
+
+Example:
+
+```php
+<?php 
+
+namespace App\Helpers;
+
+class Upload
+{
+	public static function setUpload($file) 
+	{
+		//The logic code
+	}
+}
+```
+
+And then use it in any controller this way:
+
+```php
+<?php 
+namespace App\Controllers;
+
+use Codemini\Core\Controller;
+
+// Don't forget load the helper librarie
+use App\Helpers\Upload;
+
+class Home extends Controller{
+
+    public function __construct(){
+        parent::__construct();
+    }
+
+    public function index($args=""){
+		// call methods
+        Upload::setUpload($_FILE['userfile']);
+    }
+
+}
+```
+
+### Do you want to use other components from Packagist?
+
+It is very simple.
+Just run Composer require command and load it the same way above.
+
+Example 1: `composer require plasticbrain/php-flash-messages`
+Example 2: `composer require monolog/monolog`
 
 ### Author
 
