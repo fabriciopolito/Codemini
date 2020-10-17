@@ -9,6 +9,8 @@ If you don't want to use a complex structure due to any reasons and don't want b
 
 Codemini is very simple to use, you can run your projet in `public` folder like Laravel, CodeIgniter 4 or if you are using shared host, just copy `index.php` and `.htaccess` into root folder and all thing going to work well.
 
+You can use easily other packages from Packagist.org into your project, just run `composer require <vendor>/<package>` and Codemini will understanding all packages that you have installed.
+
 **Third party tools like WAMP or XAMPP**
 
 If you are using WAMPP Server and your project is located in a subfolder then set the `$config['app_project_uri']` properly with the name folders. The config file is located in `app/Config.php`.
@@ -17,10 +19,14 @@ Example: My project is located in `C:\wamp64\www\projects\codemini_framework` th
 
 ## Requirements
 
-- Codemini works with PHP 5.4+.
+- Codemini works with PHP 5.4+. :heavy_check_mark:
 
 ## Project structure
 
+- **cli-tools** - A tools that help you create yours controllers and models
+- **codemini_tests.sql** 
+- **composer.json**
+- **LICENSE**
 - **app/**
 	- Controllers/
 	- Models/
@@ -64,7 +70,7 @@ Example: My project is located in `C:\wamp64\www\projects\codemini_framework` th
 
 **Optional:** Run with PHP built-in server, go to `public` folder and run: `php -S localhost:8080`
 
-Your index.php must looks like this:
+Your index.php should looks like this:
 
 ```php
 <?php
@@ -88,9 +94,9 @@ try {
 } //end try...catch
 ```
 
----
-
 ## Configuration
+
+> Codemini does not has many configurations.
 
 **Modify standards files:**
 
@@ -99,6 +105,8 @@ try {
 Example: 
 
 ```php
+$config['base_url'] = 'http://localhost:8080/';
+
 $config['app_project_uri'] = '';
 
 $config['environment'] = 'development';
@@ -305,7 +313,7 @@ Example: `<?php echo configItem('base_url') ?>`
 	- `Validator::getErrors()`
 	- `Validator::getMsg()`
 	- `Validator::setOpenTag('<p>')`
-	- `Validator::setOpenTag('</p>')`
+	- `Validator::setCloseTag('</p>')`
 	- `Validator::required($val)`
 	- `Validator::isEmail($val)`
 	- `Validator::isUrl($val)`
@@ -320,9 +328,9 @@ Example: `<?php echo configItem('base_url') ?>`
 ### Do you want to create other folders and files?
 
 You are free! 
-So example, create a folder `Helpers` in `./app/` and after a file `Upload.php` and the only thing you have todo is set the properly namespace for autoloading.
+So example, create a folder `Helpers` in `./app/` and a file `Upload.php` and the only thing you have to do is set the properly namespace for autoloading.
 
-Example:
+Example `./app/Helpers/Upload.php`:
 
 ```php
 <?php 
@@ -333,12 +341,14 @@ class Upload
 {
 	public static function setUpload($file) 
 	{
-		//The logic code
+		//The logic code here...
 	}
 }
 ```
 
 And then use it in any controller this way:
+
+Example `./app/Controllers/Home.php`
 
 ```php
 <?php 
@@ -346,7 +356,8 @@ namespace App\Controllers;
 
 use Codemini\Core\Controller;
 
-// Don't forget load the helper librarie
+// IMPORTANT:
+// Don't forget load the helper librarie you have created
 use App\Helpers\Upload;
 
 class Home extends Controller{
@@ -356,7 +367,7 @@ class Home extends Controller{
     }
 
     public function index($args=""){
-		// call methods
+        // call methods
         Upload::setUpload($_FILE['userfile']);
     }
 
@@ -365,16 +376,19 @@ class Home extends Controller{
 
 ### Do you want to use other components from Packagist?
 
-It is very simple.
+It is very simple!
 Just run Composer require command and load it the same way above.
 
 Example 1: `composer require plasticbrain/php-flash-messages`
+
 Example 2: `composer require monolog/monolog`
 
 ### Author
 
 Fabricio Pólito - <fabriciopolito@gmail.com> - <https://github.com/fabriciopolito>
 
+Thanks using it :+1:
+
 ### License
 
-Codemini is licensed under the MIT License
+Codemini is licensed under the MIT License :heavy_check_mark:
