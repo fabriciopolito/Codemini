@@ -39,7 +39,11 @@ if (php_sapi_name() !== 'cli') {
 
 if (strpos(PHP_SAPI, 'cgi') === 0)
 {
-	die("The cli-tools is not supported when running php-cgi\n\n");
+	showError("The cli-tools is not supported when running php-cgi\n\n");
+}
+
+if (version_compare(phpversion(), '5.4.0', '<') == true) {
+    showError('PHP5.4+ Required');
 }
 
 /*
@@ -452,7 +456,7 @@ function serveProject()
 	}
 
 	if(is_dir('public')) {
-	   $command = "php -S {$host} -t public/";
+	   $command = "php -S {$host} -t public";
 	} else {
 		$command = "php -S {$host}";
 	}
