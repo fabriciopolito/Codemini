@@ -13,7 +13,7 @@
  * @since		Version 1.0
  */
 
-namespace App\Libraries;
+namespace Codemini\Libraries;
 
 class Redirect
 {	

@@ -22,8 +22,8 @@
  * namespace App\Controllers;
  *
  * use Codemini\Core\Controller;
- * use App\Libraries\Validator;
- * use App\Libraries\Input;
+ * use Codemini\Libraries\Validator;
+ * use Codemini\Libraries\Input;
  *
  * class Login extends Controller{
  *
@@ -58,7 +58,7 @@
  * }
  */
 
-namespace App\Libraries;
+namespace Codemini\Libraries;
 
 class Validator
 {

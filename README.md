@@ -55,7 +55,9 @@ Example: My project is located in `C:\wamp64\www\projects\codemini_framework` th
 
 **2 -** Open terminal and run cli-tools: `php cli-tools serve`
 
-**Optional:** Run with PHP built-in server, go to `public` folder and run: `php -S localhost:8080` 
+**Optional:** Run with PHP built-in server, go to `public` folder and run: `php -S localhost:8080`
+
+> **Note:** In this case it is not necessary to run composer install because the composer create-project already do it for you.
 
 #### With Github
 
@@ -69,6 +71,8 @@ Example: My project is located in `C:\wamp64\www\projects\codemini_framework` th
 **3 -** Open terminal and run cli-tools: `php cli-tools serve`
 
 **Optional:** Run with PHP built-in server, go to `public` folder and run: `php -S localhost:8080`
+
+---
 
 Your index.php should looks like this:
 
@@ -96,7 +100,7 @@ try {
 
 ## Configuration
 
-> Codemini does not has many configurations.
+> **Note:** Codemini does not has many configurations.
 
 **Modify standards files:**
 
@@ -128,7 +132,7 @@ $config['page_not_found'] = 'PageNotFound@index';
 
 $config['view_extension'] = '.phtml';
 ```
-**Note:** the file app/Config.php has full documentation each option
+> **Note:** the file app/Config.php has full documentation each option
 
 - **app / `Constants.php`** - Define your project name and files location
 
@@ -291,6 +295,49 @@ Example: `<?php echo configItem('base_url') ?>`
 
 ## Libraries
 
+**How to use librarie in Controller?**
+
+It is very simple!
+Just load it with `use` instruction and the librarie will be available for you.
+
+Example:
+
+```php 
+<?php 
+namespace App\Controllers;
+
+//IMPORTANT
+// Don't forget to load with 'use' instruction
+use Codemini\Core\Controller;
+use Codemini\Libraries\Input;
+
+class Teste extends Controller{
+
+    public function __construct(){
+        parent::__construct();
+    }
+
+    public function index($args){
+        //$_POST
+        $email = Input::post('email');
+        $password = Input::post('password');
+       
+        //$_GET
+        $email = Input::get('email');
+        $password = Input::get('password');
+        
+        //FILE
+        $userfile = Input::file('userfile');
+        
+        //ALL REQUEST
+        print_r($allRequest = Input::all());
+    }
+
+}
+```
+
+**The basic libraries of Codemini**
+
 - `Input` - Help you to manipulate get, post, file
 	- `echo Input::get('email')`
 	- `echo Input::post('email')`
@@ -323,7 +370,7 @@ Example: `<?php echo configItem('base_url') ?>`
 	- `Validator::isIp($val)`
 	- `Validator::regex($val, '/[a-z]/i')`
 
-**Note:** The libraries has full documentation in each option.
+> **Note:** The libraries has full documentation in each option.
 
 ### Do you want to create other folders and files?
 

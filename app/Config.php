@@ -14,12 +14,14 @@
  */
 
 /**
+ * --------------------------------------------------------------------------------
  * How to get config item in any part of the code?
-* Just use global function configItem('key')
-*
-* Example: if(configItem('environment') == 'development') do something
-* Example: <?=configItem('base_url') ?>
-*/
+ * Just use global function configItem('key')
+ *
+ * Example: if(configItem('environment') == 'development') do something
+ * Example: <?=configItem('base_url') ?>
+ * ---------------------------------------------------------------------------------
+ */
 
 /**
  * The base url of you project
@@ -27,7 +29,7 @@
 $config['base_url'] = 'http://localhost:8080/';
 
 /**
- * App project subfolder?
+ * App project is a subfolder of www or htdocs?
  * 
  * If your project is located at SUBFOLDER in www or htdocs.
  * Example: if your project is located in wamp64/www/projects/codemini_framework/ 

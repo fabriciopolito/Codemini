@@ -21,7 +21,7 @@
  *namespace App\Controllers;
  *
  *use Codemini\Core\Controller;
- *use App\Libraries\Input;
+ *use Codemini\Libraries\Input;
  *
  *class Teste extends Controller{
  *
@@ -48,7 +48,7 @@
  *}
  */
 
-namespace App\Libraries;
+namespace Codemini\Libraries;
 
 class Input
 {	

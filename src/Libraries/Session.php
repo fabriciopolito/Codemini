@@ -20,7 +20,7 @@
  * <?php
  * namespace App\Controllers;
  * 
- * use App\Libraries\Session;
+ * use Codemini\Libraries\Session;
  * 
  * class Login extends Controller {
  * 
@@ -30,7 +30,7 @@
  *      Session::start(); 
  * 
  *      if(! Session::has('logged_in')){
- *         exit('You are not logged in');
+ *         exit('You are not logged in!');
  *      }
  * }
  * 
@@ -54,7 +54,7 @@
  * 
  */
 
-namespace App\Libraries;
+namespace Codemini\Libraries;
 
 class Session
 {    

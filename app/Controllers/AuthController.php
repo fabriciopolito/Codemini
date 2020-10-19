@@ -2,9 +2,9 @@
 
 namespace App\Controllers;
 
-use App\Libraries\Redirect;
 use Codemini\Core\Controller;
-use App\Libraries\Session;
+use Codemini\Libraries\Redirect;
+use Codemini\Libraries\Session;
 
 class AuthController extends Controller{
 
@@ -13,10 +13,13 @@ class AuthController extends Controller{
 
         Session::start();
 
-        //See more options at Session library in ./app/Libraries/Session.php
+        //See more options at Session library in ./src/Libraries/Session.php
         if(! Session::has('logged_in')){
-           Redirect::to(configItem('base_url') . 'login/index');
-           exit();
+
+            exit('You are not logged in!');
+
+           //Redirect::to(configItem('base_url') . 'login/index');
+           //exit();
         }
 
     }
