@@ -1,5 +1,18 @@
 #!/usr/bin/env php
 <?php
+/**
+ * Codemini Framework
+ *
+ * An open source application development small framework
+ *
+ * @package		Codemini Framework
+ * @author		Fabricio Polito <fabriciopolito@gmail.com>
+ * @copyright	Copyright (c) 2020 - 2020.
+ * @license		https://github.com/fabriciopolito/Codemini/blob/master/LICENSE
+ * @link		https://github.com/fabriciopolito/Codemini
+ * @since		Version 1.0
+ */
+
 /*
  * --------------------------------------------------------------------
  * CLI COMMAND-LINE TOOLS 
