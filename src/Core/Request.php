@@ -55,7 +55,7 @@ class Request
 		}
 		
 		//check if the current controller is a directory
-		if(isset($parts[0]) && self::isValidDirectoryURI($parts[0]) && is_dir(DIR_CONTROLLER . $parts[0])){
+		if(isset($parts[0]) && self::isValidDirectoryURI($parts[0]) && is_dir(DIR_CONTROLLER . ucfirst($parts[0]))) {
 			self::$_directoryController = ucfirst($parts[0]);
 			array_shift($parts);
 		}
