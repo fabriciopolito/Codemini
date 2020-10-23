@@ -40,10 +40,11 @@
  * ----------------------------------------------------------------------------------------------------------------------
  * 
  * Example with WAMP: 
- *  1. Copy project folder into www
- *  2. Copy index.php and .htaccess from public folder into root folder 
- *  3. Set the $config['app_project_uri'] with the name of subfolfer. Example: www/projects/myproject then set $config['app_project_uri'] = 'projects/myproject';
- *  4. Remove public folder and all thing going to work well
+ *  1. Copy project folder into www or htdocs
+ *  2. Copy index.php and .htaccess from public folder into root folder
+ *  3. Remove public folder if you want
+ * 
+ * and all thing going to work well
  * 
  * ----------------------------------------------------------------------------------------------------------------------
  * 
@@ -54,7 +55,7 @@
  * 
  *  ... And create yours Controllers, Views and Models manually OR use cli-tools, example:
  * 
- *      php clit-tools help - Display list of commands
+ *      php clit-tools help - display list of commands
  *      php cli-tools create-controller Home
  *      php cli-tools create-model Home
  * 

@@ -31,46 +31,38 @@ class Request
 	 */
 	public static function start()
 	{
-		/**
-		 * If the project is located in subfolder of www or htdocs then remove uri from url project folders
-		 */
-		$app_uri = strtolower(configItem('app_project_uri'));
+		$parts = explode("index.php", $_SERVER["PHP_SELF"]);
+		$parts = end($parts);
 		
-		if( ! empty($app_uri)) {
+        if(empty($parts) OR $parts == "/") {
 
-			$app_uri = ltrim($app_uri, "/");
-			$app_uri = rtrim($app_uri, "/");
-			$app_uri = "/" . $app_uri . "/";
+			self::$_controller = "Home";
+			self::$_method = "index";
+			self::$_args = array();
 
-			$_SERVER['REQUEST_URI'] = str_replace($app_uri, "", strtolower($_SERVER['REQUEST_URI']));
-		}
-
-        $parts = explode('/',$_SERVER['REQUEST_URI']);
-        $parts = array_filter($parts);
-        $parts = array_values($parts);
-
-        //Remove index.php from URI
-        if(isset($parts[0]) && $parts[0] == 'index.php'){
-            array_shift($parts);
-		}
+		} else {
+			
+			//the parts of URI controller/method/args
+			$parts = explode('/', $parts);
+			$parts = array_filter($parts);
+        	$parts = array_values($parts);
 		
-		//check if the current controller is a directory
-		if(isset($parts[0]) && self::isValidDirectoryURI($parts[0]) && is_dir(DIR_CONTROLLER . ucfirst($parts[0]))) {
-			self::$_directoryController = ucfirst($parts[0]);
-			array_shift($parts);
+			//check if the current controller is a directory
+			if(isset($parts[0]) && self::isValidDirectoryURI($parts[0]) && is_dir(DIR_CONTROLLER . ucfirst($parts[0]))) {
+				self::$_directoryController = ucfirst($parts[0]);
+				array_shift($parts);
+			}
+
+			self::$_controller = ($c = array_shift($parts))? self::isValidURI($c) : "Home";
+			self::$_controller = str_replace("-", "_", self::$_controller);
+			self::$_controller = ucfirst(self::$_controller);
+
+			self::$_method = ($c = array_shift($parts)) ? self::isValidURI($c) : 'index';
+			self::$_method = str_replace("-", "_", self::$_method);
+
+			self::$_args = (isset($parts[0])) ? $parts : array();
+
 		}
-
-		self::$_controller = ($c = array_shift($parts))? self::isValidURI($c) : 'Home';
-		self::$_controller = str_replace("-", "_", self::$_controller);
-		self::$_controller = ucfirst(self::$_controller);
-
-		//Check if query string exists
-		$c = array_shift($parts);
-		$c = (strpos($c, "?") === false) ? $c : current(explode("?", $c));
-		self::$_method = ($c) ? self::isValidURI($c) : 'index';
-		self::$_method = str_replace("-", "_", self::$_method);
-
-		self::$_args = (isset($parts[0])) ? $parts : array();
     }
     
     /**

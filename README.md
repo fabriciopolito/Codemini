@@ -7,15 +7,26 @@ Mini PHP framework - Create quickly application with standard MVC structure.
 
 If you don't want to use a complex structure due to any reasons and don't want being tied down it, so Codemini is option for you.
 
-Codemini is very simple to use, you can run your projet in `public` folder like Laravel, CodeIgniter 4 or if you are using shared host, just copy `index.php` and `.htaccess` into root folder and all thing going to work well.
+Codemini is very simple to use, you can run your projet in `public` folder like Laravel, CodeIgniter 4 or if you are using shared host, just copy `index.php` and `.htaccess` from public folder into root folder and all things going to work well.
 
 You can use easily other packages from Packagist.org into your project, just run `composer require <vendor>/<package>` and Codemini will understanding all packages that you have installed.
 
 **Third party tools like WAMP or XAMPP**
 
-If you are using WAMPP Server and your project is located in a subfolder then set the `$config['app_project_uri']` properly with the name folders. The config file is located in `app/Config.php`.
+As i sad above, if you are using shared host or using tools like WAMP or XAMPP, just copy `index.php` and `.htaccess` from public folder into root folder and all things going to work well.
 
-Example: My project is located in `C:\wamp64\www\projects\codemini_framework` then set this way `$config['app_project_uri'] = 'projects/codemini_framework'` and all thing going to work well.
+**Example:**
+
+1. Copy your project folder into `www` or `htdocs`
+2. Copy `index.php` and `.htaccess` from public folder into root folder
+
+> **Note:** Remove public folder if you want
+
+**Why do it?**
+
+Because when you are using tools like WAMP or XAMPP, the DocumentRoot of Apache is point to root folder www (WAMP) or htdocs (XAMPP) and not to public folder of framework.
+
+This rule is valid not only for Codemini but CodeIgniter 4, Laravel etc. It is the way the frameworks works.
 
 ## Requirements
 
@@ -23,15 +34,14 @@ Example: My project is located in `C:\wamp64\www\projects\codemini_framework` th
 
 ## Project structure
 
-- **cli-tools** - A tools that help you create yours controllers and models
-- **codemini_tests.sql** 
-- **composer.json**
-- **LICENSE**
+- cli-tools
+- codemini_tests.sql
+- composer.json
+- LICENSE
 - **app/**
 	- Controllers/
 	- Models/
 	- Views/
-	- Libraries/
 	- Config.php
 	- Constants.php
 	- Connection.php
@@ -46,6 +56,11 @@ Example: My project is located in `C:\wamp64\www\projects\codemini_framework` th
 		- Controller.php
 		- Model.php
 		- Request.php
+	- Libraries/
+		- Input.php
+		- Redirect.php
+		- Session.php
+		- Validator.php
 
 ## Installation
 
@@ -110,8 +125,6 @@ Example:
 
 ```php
 $config['base_url'] = 'http://localhost:8080/';
-
-$config['app_project_uri'] = '';
 
 $config['environment'] = 'development';
 

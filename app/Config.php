@@ -29,16 +29,6 @@
 $config['base_url'] = 'http://localhost:8080/';
 
 /**
- * App project is a subfolder of www or htdocs?
- * 
- * If your project is located at SUBFOLDER in www or htdocs.
- * Example: if your project is located in wamp64/www/projects/codemini_framework/ 
- * then set variable $config['app_project_uri'] = '/projects/codemini_framework/';
- * else set blank variable
- */
-$config['app_project_uri'] = '';
-
-/**
  * Possible values: development, production
  */
 $config['environment'] = 'development';
