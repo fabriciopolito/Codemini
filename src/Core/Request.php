@@ -48,10 +48,17 @@ class Request
         	$parts = array_values($parts);
 		
 			//check if the current controller is a directory
-			if(isset($parts[0]) && self::isValidDirectoryURI($parts[0]) && is_dir(DIR_CONTROLLER . ucfirst($parts[0]))) {
-				self::$_directoryController = ucfirst($parts[0]);
-				array_shift($parts);
-			}
+			if(isset($parts[0])) {
+
+                $dirExists = str_replace("-", "_", $parts[0]);
+                $dirExists = ucfirst($dirExists);
+
+                if(self::isValidDirectoryURI($dirExists) && is_dir(DIR_CONTROLLER . $dirExists)) {
+                    self::$_directoryController = $dirExists;
+                    array_shift($parts);
+				}
+				
+            }
 
 			self::$_controller = ($c = array_shift($parts))? self::isValidURI($c) : "Home";
 			self::$_controller = str_replace("-", "_", self::$_controller);
