@@ -1,40 +1,38 @@
 ![Codemini](https://i.ibb.co/DpZpBjB/codemini.png)
 
 # Codemini
-Mini PHP framework - Create quickly application with standard MVC structure.
+Mini PHP framework - Crie uma aplicação rápida no padrão MVC
 
-*Leia na versão em português (pt-BR): [Português pt-BR](README.pt-br.md)*
+**Por que usar o Codemini?**
 
-**Why use Codemini?**
+Se você não quer ficar usar uma estrutura de código complexa e não quer ficar preso a ela, então o Codemini é pra você.
 
-If you don't want to use a complex structure due to any reasons and don't want being tied down it, so Codemini is option for you.
+Codemini é muito simples de usar, você poder executar o seu projeto na pasta `public` assim como o Laravel, CodeIgniter 4 por exemplo ou se você estiver usando um host compartilhado, apenas copie o arquivo `index.php` e `.htaccess` da pasta pública para dentro da pasta raiz do seu projeto e tudo é pra funcionar normalmente.
 
-Codemini is very simple to use, you can run your projet in `public` folder like Laravel, CodeIgniter 4 or if you are using shared host, just copy `index.php` and `.htaccess` from public folder into root folder and all things going to work well.
+Você pode usar facilmente outros pacotes do Packagist.org dentro do seu projeto, basta executar `composer require <vendor>/<package>` e o Codemini irá entender todos os pacotes que você tem instalado.
 
-You can use easily other packages from Packagist.org into your project, just run `composer require <vendor>/<package>` and Codemini will understanding all packages that you have installed.
+**Ferramentas de terceiros como WAMP ou XAMPP**
 
-**Third party tools like WAMP or XAMPP**
+Como eu disse acima, se você estiver usando um host compartilhado ou usando os utilitários WAMP ou XAMPP localmente, apenas copie `index.php` e `.htaccess` da pasta pública para dentro da pasta raiz do seu projeto e tudo irá funcionar.
 
-As i sad above, if you are using shared host or using tools like WAMP or XAMPP, just copy `index.php` and `.htaccess` from public folder into root folder and all things going to work well.
+**Exemplo:**
 
-**Example:**
+1. Copie a pasta do seu projeto para o `www` ou `htdocs`
+2. Copie o arquivo `index.php` e `.htaccess` da pasta pública para dentro da pasta raiz
 
-1. Copy your project folder into `www` or `htdocs`
-2. Copy `index.php` and `.htaccess` from public folder into root folder
+> **Nota:** Remova a pasta public se você quiser
 
-> **Note:** Remove public folder if you want
+**Por que fazer isso?**
 
-**Why do it?**
+Porque quando você está usando os utilitários WAMP ou XAMPP, o DocumentRoot do Apache está apontando para a pasta raiz do www no caso do WAMP ou para o htdocs no caso do XAMPP e não para a pasta public do framework.
 
-Because when you are using tools like WAMP or XAMPP, the DocumentRoot of Apache is point to root folder www (WAMP) or htdocs (XAMPP) and not to public folder of framework.
+Esta regra é valida não somente para o Codemini mas também para o Laravel, Codeigniter 4 etc. É assim que os frameworks funcionam.
 
-This rule is valid not only for Codemini but CodeIgniter 4, Laravel etc. It is the way the frameworks works.
+## Requerimentos
 
-## Requirements
+- Codemini funciona com PHP 5.4+. :heavy_check_mark:
 
-- Codemini works with PHP 5.4+. :heavy_check_mark:
-
-## Project structure
+## Estrutura do projeto
 
 - cli-tools
 - codemini_tests.sql
@@ -64,34 +62,34 @@ This rule is valid not only for Codemini but CodeIgniter 4, Laravel etc. It is t
 		- Session.php
 		- Validator.php
 
-## Installation
+## Instalação
 
-#### With Composer Creating Project
+#### Criando um projeto com Composer - via create-project
 
-**1 -** If you want to install as composer project, run: `composer create-project --prefer-dist codemini/framework name-folder-of-you-project`  
+**1 -** Se você quer instalar com o Composer, no terminal, execute: `composer create-project --prefer-dist codemini/framework nome-do-seu-projeto`
 
-**2 -** Open terminal and run cli-tools: `php cli-tools serve`
+**2 -** Depois execute o **cli-tools** para iniciar o servidor integrado do PHP: `php cli-tools serve`
 
-**Optional:** Run with PHP built-in server, go to `public` folder and run: `php -S localhost:8080`
+**Opcional:** Execute com o servidor integrado do PHP, vá para a pasta `public` e execute: `php -S localhost:8080`
 
-> **Note:** In this case it is not necessary to run composer install because the composer create-project already do it for you.
+> **Nota:** Nesse caso não é necessário executar o composer install para criar o autoload porque o próprio composer create-project já faz isso para você.
 
-#### With Github
+#### Criando um projeto com o Github
 
-**1 -** If you want to install with **Git clone**, run: `git clone https://github.com/fabriciopolito/Codemini.git` or download "Download ZIP" and extract files.
+**1 -** Se você quer instalar com o **git clone**, no terminal, execute: `git clone https://github.com/fabriciopolito/Codemini.git` ou faça o download "Download ZIP".
 
-**2 -** Run **Composer (required)** in root project folder where contain **composer.json** to create **autoload files**.
+**2 -** Execute o **Composer (obritatório)** na pasta raiz onde contém o arquivo **composer.json** para criar os **arquivos de autoload**.
 
-- If you have installed Composer globally:  `composer install`  
-- If you have composer.phar: `php composer.phar install`
+- Se você tem o Composer instalado globalmente:  `composer install`  
+- Se você tem o composer.phar na pasta do seu projeto: `php composer.phar install`
 
-**3 -** Open terminal and run cli-tools: `php cli-tools serve`
+**3 -** Abra o terminal e execute: `php cli-tools serve`
 
-**Optional:** Run with PHP built-in server, go to `public` folder and run: `php -S localhost:8080`
+**Opcional:** Execute com o servidor integrado do PHP, vá para a pasta `public` e execute: `php -S localhost:8080`
 
 ---
 
-Your index.php should looks like this:
+Seu arquivo `index.php` deve se parecer com isso:
 
 ```php
 <?php
@@ -115,15 +113,15 @@ try {
 } //end try...catch
 ```
 
-## Configuration
+## Configuração
 
-> **Note:** Codemini does not has many configurations.
+> **Nota:** Codemini não tem muitos arquivos de configuração
 
-**Modify standards files:**
+**Modifique os arquivos padrão:**
 
- - **app / `Config.php`** - Define config to base_url, mysql, environment, timezone etc
+ - **app / `Config.php`** - Configure seu base_url, mysql, environment, timezone etc
 
-Example: 
+Exemplo: 
 
 ```php
 $config['base_url'] = 'http://localhost:8080/';
@@ -147,21 +145,21 @@ $config['page_not_found'] = 'PageNotFound@index';
 
 $config['view_extension'] = '.phtml';
 ```
-> **Note:** the file app/Config.php has full documentation each option
+> **Nota:** O arquivo app/Config.php tem uma explicação do que cada opção faz
 
-- **app / `Constants.php`** - Define your project name and files location
+- **app / `Constants.php`** - Opcional, configure o nome do seu projeto e os arquivos de localização do framework
 
- ... and create yours Controllers, Views and Models !
+ ... e crie os seus Controllers, Views e Models.
 
-## Using Controller, Models and Views
+## Usando os Controllers, Views e Models
 
-### Creating Controller
+### Criando Controller
 
 Controllers / `Home.php`
 
-- With cli-tools: `php cli-tools create-controller Home`
+- Com o cli-tools: `php cli-tools create-controller Home`
 
-Output: ./app/Controllers/Home.php
+Saída: ./app/Controllers/Home.php
 
  ```php
 <?php 
@@ -178,20 +176,20 @@ class Home extends Controller{
 
     public function index($args=""){
         
-        //Data to view
+        //Dados para a view
         //Example: $this->view->data = ['php', 'js', 'nodejs', 'mongodb', 'css'];
 
-		//Load view
+		//Carregar view
 		//$this->view('template_name');
 		
 		echo "Controller name: " . Request::getController() . "<br>";
-         echo "Method name: " . Request::getMethod() . "<br>";
+        echo "Method name: " . Request::getMethod() . "<br>";
     }
 
 }
 ```
  
-### Creating Views
+### Criando Views
 
 Views / `Template/index.phtml`
  
@@ -208,7 +206,7 @@ Views / `Template/index.phtml`
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     
-    <title>Application name</title>
+    <title>Nome da aplicação</title>
   </head>
   <body>
   
@@ -228,13 +226,13 @@ Views / `Template/index.phtml`
 </html>
 ```
 
-### Creating Models
+### Criando Models
 
 Models / `Products.php`
 
-- With cli-tools: `php cli-tools create-model Products`
+- Com o cli-tools: `php cli-tools create-model Products`
 
-Output: ./app/Models/Products.php
+Saída: ./app/Models/Products.php
  
  ```php
 <?php 
@@ -301,28 +299,28 @@ class Products extends Model{
 	}
 }
 ```
-## Helper Functions
+## Funções de ajuda
 
-- `configItem('key')` return the config specified name.
-Example: `<?php echo configItem('base_url') ?>`
+- `configItem('chave')` retorna a configuração desejada 
+Exemplo: `<?php echo configItem('base_url') ?>`
 
-- `&getInstance()` return controller object instance
+- `&getInstance()` retorna a instância do objecto controller
 
-## Libraries
+## Bibliotecas
 
-**How to use librarie in Controller?**
+**Como usar uma biblioteca no Controller?**
 
-It is very simple!
-Just load it with `use` instruction and the librarie will be available for you.
+É muito simples!
+Apenas use a instrução `use` e a biblioteca estará disponível para você.
 
-Example:
+Exemplo:
 
 ```php 
 <?php 
 namespace App\Controllers;
 
-//IMPORTANT
-// Don't forget to load with 'use' instruction
+//IMPORTANTE
+// Não esqueça da instrução "use"
 use Codemini\Core\Controller;
 use Codemini\Libraries\Input;
 
@@ -351,16 +349,16 @@ class Teste extends Controller{
 }
 ```
 
-**The basic libraries of Codemini**
+**As bibliotecas básicas do Codemini**
 
-- `Input` - Help you to manipulate get, post, file
+- `Input` - Ajuda você a manipular get, post, file
 	- `echo Input::get('email')`
 	- `echo Input::post('email')`
 	- `echo Input::file('userfile')`
 	- `echo Input::all()`
-- `Redirect` - Redirect user to other location
+- `Redirect` - Redireciona o usuário para outro lugar
 	- `echo Redirect::to(configItem('base_url') . 'login/index')`
-- `Session` - Help you to manipulate session data
+- `Session` - Ajuda você a manipular os dados de sessão
 	- `Session::start()`
 	- `Session::set('logged_in', true)`
 	- `Session::set(array('user_id' => 1, 'logged_in' => true))`
@@ -371,7 +369,7 @@ class Teste extends Controller{
 	- `Session::regenerateId()`
 	- `Session::remove('user_id')`
 	- `Session::destroy()`
-- `Validator` - Help you validate data
+- `Validator` - Ajuda você a validar os dados
 	- `Validator::getErrors()`
 	- `Validator::getMsg()`
 	- `Validator::setOpenTag('<p>')`
@@ -385,14 +383,14 @@ class Teste extends Controller{
 	- `Validator::isIp($val)`
 	- `Validator::regex($val, '/[a-z]/i')`
 
-> **Note:** The libraries has full documentation in each option.
+> **Nota:** As bibliotecas tem uma explicação do que cada opção faz
 
-### Do you want to create other folders and files?
+### Você quer criar outras pastas e arquivos?
 
-You are free! 
-So example, create a folder `Helpers` in `./app/` and a file `Upload.php` and the only thing you have to do is set the properly namespace for autoloading.
+Você é livre!
+Por exemplo, crie uma pasta `Helpers` no `./app/`e um arquivo chamado `Upload.php` e a única coisa que você tem que fazer é configurar os `namespaces` corretamente de acordo com a hierarquia das pastas.
 
-Example `./app/Helpers/Upload.php`:
+Exemplo `./app/Helpers/Upload.php`:
 
 ```php
 <?php 
@@ -403,14 +401,14 @@ class Upload
 {
 	public static function setUpload($file) 
 	{
-		//The logic code here...
+		//A lógica do seu código aqui...
 	}
 }
 ```
 
-And then use it in any controller this way:
+E depois use a sua biblioteca em qualquer lugar do seu Controller, dessa forma:
 
-Example `./app/Controllers/Home.php`
+Exemplo `./app/Controllers/Home.php`
 
 ```php
 <?php 
@@ -418,8 +416,8 @@ namespace App\Controllers;
 
 use Codemini\Core\Controller;
 
-// IMPORTANT:
-// Don't forget load the helper librarie you have created
+// IMPORTANTE:
+// Não esqueça da instrução "use"
 use App\Helpers\Upload;
 
 class Home extends Controller{
@@ -436,21 +434,21 @@ class Home extends Controller{
 }
 ```
 
-### Do you want to use other components from Packagist?
+### Você quer usar outros componentes do Packagist?
 
-It is very simple!
-Just run Composer require command and load it the same way above.
+É muito simples!
+Basta executar o composer require e carregar a biblioteca da mesma forma acima.
 
-Example 1: `composer require plasticbrain/php-flash-messages`
+Exemplo 1: `composer require plasticbrain/php-flash-messages`
 
-Example 2: `composer require monolog/monolog`
+Exemplo 2: `composer require monolog/monolog`
 
-### Author
+### Desenvolvedor
 
 Fabricio Pólito - <fabriciopolito@gmail.com> - <https://github.com/fabriciopolito>
 
-Thanks using it :+1:
+Obrigado por usar :+1:
 
 ### License
 
-Codemini is licensed under the MIT License :heavy_check_mark:
+Codemini está licenciado sob o MIT License :heavy_check_mark:
