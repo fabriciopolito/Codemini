@@ -5,7 +5,7 @@ Mini PHP framework - Crie uma aplicação rápida no padrão MVC
 
 **Por que usar o Codemini?**
 
-Se você não quer ficar usar uma estrutura de código complexa e não quer ficar preso a ela, então o Codemini é pra você.
+Se você não quer usar uma estrutura de código complexa e não quer ficar preso a ela, então o Codemini é pra você.
 
 Codemini é muito simples de usar, você poder executar o seu projeto na pasta `public` assim como o Laravel, CodeIgniter 4 por exemplo ou se você estiver usando um host compartilhado, apenas copie o arquivo `index.php` e `.htaccess` da pasta pública para dentro da pasta raiz do seu projeto e tudo é pra funcionar normalmente.
 
